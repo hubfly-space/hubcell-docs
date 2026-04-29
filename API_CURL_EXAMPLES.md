@@ -21,6 +21,30 @@ curl "$BASE/v1/config"
 curl "$BASE/v1/openapi.json"
 ```
 
+## Websocket realtime feed
+
+Open a websocket and subscribe to cells, stats, and event batches.
+
+With `websocat`:
+
+```sh
+websocat "ws://localhost:8080/v1/ws"
+```
+
+Then send JSON messages such as:
+
+```json
+{"action":"subscribe","subscription_id":"cells-main","topic":"cells","interval_ms":1000}
+{"action":"subscribe","subscription_id":"demo-stats","topic":"stats","cell_id":"demo","interval_ms":1000}
+{"action":"subscribe","subscription_id":"events-main","topic":"events","cursor":"0","interval_ms":1000}
+```
+
+Unsubscribe:
+
+```json
+{"action":"unsubscribe","subscription_id":"cells-main"}
+```
+
 ## Image extraction
 
 Extract a Docker image into hubcell's image store without creating a container:
