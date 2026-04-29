@@ -764,6 +764,14 @@ curl -X PATCH "$BASE/v1/networks/appnet/labels" \
   -d '{"labels":{"env":"dev","team":"platform"}}'
 ```
 
+Replace shared network upload/download caps live:
+
+```sh
+curl -X PATCH "$BASE/v1/networks/appnet/limits" \
+  -H "$JSON" \
+  -d '{"egress_rate_bps":20000000,"ingress_rate_bps":10000000}'
+```
+
 ## Events and audit
 
 List lifecycle events:
