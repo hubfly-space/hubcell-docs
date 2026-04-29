@@ -1,9 +1,9 @@
 # hubcell API curl examples
 
-These examples assume the API is listening on `localhost:8080`.
+These examples assume the API is listening on `localhost:10012`.
 
 ```sh
-BASE=http://localhost:8080
+BASE=http://localhost:10012
 JSON='Content-Type: application/json'
 ```
 
@@ -28,7 +28,7 @@ Open a websocket and subscribe to cells, stats, and event batches.
 With `websocat`:
 
 ```sh
-websocat "ws://localhost:8080/v1/ws"
+websocat "ws://localhost:10012/v1/ws"
 ```
 
 Then send JSON messages such as:
