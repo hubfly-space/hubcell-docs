@@ -95,8 +95,8 @@ curl -X POST "$BASE/v1/cells/run" \
     "id": "gitea",
     "image": "gitea/gitea:latest",
     "security": {
-      "privileged": true,
       "add_capabilities": ["ALL"],
+      "drop_capabilities": [],
       "seccomp_profile": "unconfined",
       "no_new_privileges": false
     }
@@ -155,6 +155,20 @@ curl -X POST "$BASE/v1/cells" \
     "image": "alpine:latest",
     "resources": {
       "memory_max_bytes": 1073741824
+    }
+  }'
+```
+
+Create a stopped cell with labels. `created_by_version` is tagged automatically:
+
+```sh
+curl -X POST "$BASE/v1/cells" \
+  -H "$JSON" \
+  -d '{
+    "image": "alpine:latest",
+    "labels": {
+      "app": "demo",
+      "tier": "test"
     }
   }'
 ```
@@ -234,6 +248,39 @@ curl -X POST "$BASE/v1/cells/run" \
     "image": "raonigabriel/web-terminal:latest",
     "network": {
       "allow_host": true
+    }
+  }'
+```
+
+Run with vertical autoscaling for memory, CPU, and rootfs growth:
+
+```sh
+curl -X POST "$BASE/v1/cells/run" \
+  -H "$JSON" \
+  -d '{
+    "image": "alpine:latest",
+    "command": ["/bin/sh", "-c", "sleep 300"],
+    "resources": {
+      "memory_max_bytes": 536870912,
+      "cpu_quota_us": 50000,
+      "cpu_period_us": 100000
+    },
+    "storage": {
+      "rootfs_initial_size_bytes": 1073741824,
+      "rootfs_virtual_size_bytes": 8589934592
+    },
+    "scaling": {
+      "memory": {
+        "final_max_bytes": 2147483648
+      },
+      "cpu": {
+        "final_quota_us": 200000
+      },
+      "rootfs": {
+        "max_size_bytes": 8589934592,
+        "scale_up_usage_pct": 82,
+        "scale_up_step_bytes": 1073741824
+      }
     }
   }'
 ```
@@ -413,6 +460,40 @@ curl -X PATCH "$BASE/v1/cells/demo/restart" \
   -d '{"restart":{"name":"no"}}'
 ```
 
+## Labels and scaling
+
+Update cell labels without restarting:
+
+```sh
+curl -X PATCH "$BASE/v1/cells/demo/labels" \
+  -H "$JSON" \
+  -d '{
+    "labels": {
+      "owner": "platform",
+      "service": "api"
+    }
+  }'
+```
+
+Update vertical scaling policy:
+
+```sh
+curl -X PATCH "$BASE/v1/cells/demo/scaling" \
+  -H "$JSON" \
+  -d '{
+    "scaling": {
+      "memory": {
+        "min_max_bytes": 536870912,
+        "final_max_bytes": 2147483648
+      },
+      "cpu": {
+        "min_quota_us": 50000,
+        "final_quota_us": 200000
+      }
+    }
+  }'
+```
+
 ## Logs
 
 ```sh
@@ -568,6 +649,14 @@ curl -X POST "$BASE/v1/networks" \
   -d '{"name":"appnet"}'
 ```
 
+Create a network with an auto-generated name:
+
+```sh
+curl -X POST "$BASE/v1/networks" \
+  -H "$JSON" \
+  -d '{"labels":{"role":"shared"}}'
+```
+
 Create a named network with explicit subnet, bridge, labels, and shaping:
 
 ```sh
@@ -618,6 +707,17 @@ curl -X POST "$BASE/v1/networks/appnet/connect" \
   -d '{"cell_id":"demo","ipv4_address":"10.250.20.50","interface_name":"eth1"}'
 ```
 
+Attach with aliases:
+
+```sh
+curl -X POST "$BASE/v1/networks/appnet/connect" \
+  -H "$JSON" \
+  -d '{
+    "cell_id": "demo",
+    "aliases": ["web", "frontend"]
+  }'
+```
+
 Disconnect from one network:
 
 ```sh
@@ -630,6 +730,14 @@ Delete an unused network:
 
 ```sh
 curl -X DELETE "$BASE/v1/networks/appnet"
+```
+
+Update network labels:
+
+```sh
+curl -X PATCH "$BASE/v1/networks/appnet/labels" \
+  -H "$JSON" \
+  -d '{"labels":{"env":"dev","team":"platform"}}'
 ```
 
 ## Events and audit
