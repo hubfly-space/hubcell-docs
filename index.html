@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubcell Documentation</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --text-color: #1f2937;
+            --heading-color: #111827;
+            --accent-color: #2563eb;
+            --code-bg: #e5e7eb;
+            --border-color: #d1d5db;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        h1, h2, h3 { color: var(--heading-color); }
+        h1 { border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        pre, code {
+            background-color: var(--code-bg);
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        code { padding: 0.2em 0.4em; }
+        pre { padding: 1rem; overflow-x: auto; }
+        pre code { padding: 0; background-color: transparent; }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hubcell Documentation</h1>
+        <p>Welcome to the official documentation for <strong>Hubcell</strong>, a robust node runner and container management system.</p>
+
+        <h2>Installation</h2>
+        <p>You can easily install Hubcell via our installation script:</p>
+        <pre><code>curl -sL https://raw.githubusercontent.com/hubfly-space/hubcell-docs/master/install.sh | sudo bash</code></pre>
+
+        <h2>Getting Started</h2>
+        <p>Once installed, start the Hubcell node with the web interface:</p>
+        <pre><code>hubcell serve --web</code></pre>
+
+        <h2>Resources</h2>
+        <ul>
+            <li><a href="https://github.com/hubfly-space/hubcell-docs">GitHub Repository</a></li>
+            <li><a href="API_CURL_EXAMPLES.md">API Examples</a></li>
+            <li><a href="CLEANUP_AND_RECOVERY.md">Cleanup & Recovery Guide</a></li>
+            <li><a href="CHANGELOG.md">Changelog</a></li>
+        </ul>
+        
+        <p><em>Built with ❤️ by the Hubfly team.</em></p>
+    </div>
+</body>
+</html>
